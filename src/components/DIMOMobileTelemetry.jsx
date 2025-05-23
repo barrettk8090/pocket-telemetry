@@ -257,7 +257,12 @@ ${signalQueries}
       console.log('Query type:', queryType);
       console.log('Generated query:', generateQuery());
 
-      const response = await fetch('/api/telemetry/query', {
+      // Use direct DIMO API in production, proxy in development
+      const telemetryUrl = import.meta.env.DEV 
+        ? '/api/telemetry/query'  // Use Vite proxy in development
+        : 'https://telemetry-api.dimo.zone/query';  // Direct API in production
+
+      const response = await fetch(telemetryUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -307,7 +312,10 @@ ${signalQueries}
     try {
       console.log('Generating Vehicle JWT via backend...');
       
-      const response = await fetch('/api/auth/vehicle-jwt', {
+      // Use environment variable for API URL, fallback to local for development
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      
+      const response = await fetch(`${apiUrl}/api/auth/vehicle-jwt`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

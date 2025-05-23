@@ -18,7 +18,16 @@ app = FastAPI(title="DIMO Telemetry Backend", version="1.0.0")
 # Configure CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:3000", "http://127.0.0.1:5173"],
+    allow_origins=[
+        "http://localhost:3000", 
+        "http://localhost:5173", 
+        "http://127.0.0.1:3000", 
+        "http://127.0.0.1:5173",
+        # Add production frontend URL (we'll update this after deployment)
+        "https://*.onrender.com",
+        # Allow any Render app domain for now
+        "*"  # TODO: Replace with specific domain after frontend deployment
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -107,4 +116,5 @@ async def health_check():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000, reload=True) 
+    port = int(os.environ.get("PORT", 8000))  # Render sets PORT automatically
+    uvicorn.run(app, host="0.0.0.0", port=port, reload=False)  # reload=False for production 
