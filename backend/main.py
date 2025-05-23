@@ -23,10 +23,7 @@ app.add_middleware(
         "http://localhost:5173", 
         "http://127.0.0.1:3000", 
         "http://127.0.0.1:5173",
-        # Add production frontend URL (we'll update this after deployment)
-        "https://*.onrender.com",
-        # Allow any Render app domain for now
-        "*"  # TODO: Replace with specific domain after frontend deployment
+        "https://pocket-telemetry-frontend.onrender.com",  # Temporary - allows all Render apps
     ],
     allow_credentials=True,
     allow_methods=["*"],
