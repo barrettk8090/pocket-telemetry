@@ -321,7 +321,7 @@ ${signalQueries}
             </div>
             <div>
               <h1 className="text-lg font-semibold text-white">PocketTelemetry</h1>
-              <p className="text-gray-400 text-sm">DIMO Telemetry Explorer</p>
+              <p className="text-gray-400 text-sm">DIMO Telemetry API Explorer</p>
             </div>
           </div>
         </div>
@@ -512,7 +512,7 @@ ${signalQueries}
                       e.target.style.borderColor = '';
                       e.target.style.boxShadow = '';
                     }}
-                    placeholder="Paste your Vehicle JWT here"
+                    placeholder="Your Vehicle JWT will be generated here. Alternatively, paste your own."
                     rows={4}
                   />
                 </div>
@@ -557,8 +557,8 @@ ${signalQueries}
                       borderColor: 'rgba(112, 188, 255, 0.3)'
                     } : {}}
                   >
-                    <div className="text-sm font-semibold text-white">Latest Signals</div>
-                    <div className="text-xs text-gray-400 mt-1">Current values only</div>
+                    <div className="text-sm font-semibold text-white">signalsLatest</div>
+                    <div className="text-xs text-gray-400 mt-1">Current vehicle signals</div>
                   </button>
                   <button
                     onClick={() => setQueryType('signals')}
@@ -572,8 +572,8 @@ ${signalQueries}
                       borderColor: 'rgba(112, 188, 255, 0.3)'
                     } : {}}
                   >
-                    <div className="text-sm font-semibold text-white">Historical Signals</div>
-                    <div className="text-xs text-gray-400 mt-1">Time series data</div>
+                    <div className="text-sm font-semibold text-white">signals</div>
+                    <div className="text-xs text-gray-400 mt-1">Historical time series data</div>
                   </button>
                 </div>
               </div>
