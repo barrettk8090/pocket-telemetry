@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Key, Car, Send, Copy, CheckCircle, AlertCircle, Loader2, Calendar, Clock } from 'lucide-react';
 import DimoLogo from '../assets/Dimo.svg';
 
@@ -23,6 +23,39 @@ const DIMOMobileTelemetry = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
+  const [jwtTimer, setJwtTimer] = useState(null); // Timer in seconds, starts at 599 (9:59)
+
+  // JWT Timer countdown effect
+  useEffect(() => {
+    let interval = null;
+    if (jwtTimer !== null && jwtTimer > 0) {
+      interval = setInterval(() => {
+        setJwtTimer(prevTimer => {
+          if (prevTimer <= 1) {
+            return 0; // Stop at 0
+          }
+          return prevTimer - 1;
+        });
+      }, 1000);
+    } else if (jwtTimer === 0) {
+      // Timer reached zero, JWT is expired
+      clearInterval(interval);
+    }
+
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [jwtTimer]);
+
+  // Format timer display (mm:ss)
+  const formatTimer = (seconds) => {
+    if (seconds === null || seconds < 0) return null;
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+  };
 
   // Available aggregation functions
   const floatAggregationOptions = [
@@ -297,6 +330,9 @@ ${signalQueries}
       setVehicleJWT(data.vehicle_jwt);
       setError(''); // Clear any previous errors
       
+      // Start the countdown timer
+      setJwtTimer(599); // 9 minutes and 59 seconds
+      
     } catch (err) {
       console.error('Authentication error:', err);
       
@@ -521,6 +557,23 @@ ${signalQueries}
                   <div className="mt-3 flex items-center text-sm px-3 py-2 rounded-lg" style={{ color: '#70BCFF', backgroundColor: 'rgba(112, 188, 255, 0.1)', borderColor: 'rgba(112, 188, 255, 0.3)', border: '1px solid' }}>
                     <CheckCircle className="w-4 h-4 mr-2" />
                     JWT configured successfully
+                  </div>
+                )}
+
+                {/* JWT Timer Display */}
+                {vehicleJWT && jwtTimer !== null && (
+                  <div className="mt-2">
+                    {jwtTimer > 0 ? (
+                      <div className="flex items-center text-sm px-3 py-2 rounded-lg" style={{ color: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.3)', border: '1px solid' }}>
+                        <Clock className="w-4 h-4 mr-2" />
+                        JWT expires in: {formatTimer(jwtTimer)}
+                      </div>
+                    ) : (
+                      <div className="flex items-center text-sm px-3 py-2 rounded-lg" style={{ color: '#ef4444', backgroundColor: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.3)', border: '1px solid' }}>
+                        <AlertCircle className="w-4 h-4 mr-2" />
+                        Vehicle JWT Expired - request a new one
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
