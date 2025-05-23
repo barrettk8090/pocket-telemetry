@@ -11,6 +11,10 @@ export default defineConfig({
         target: 'https://telemetry-api.dimo.zone',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api\/telemetry/, '')
+      },
+      '/api/auth': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
       }
     }
   }

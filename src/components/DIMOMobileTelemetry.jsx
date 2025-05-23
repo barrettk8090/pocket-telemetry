@@ -262,22 +262,48 @@ ${signalQueries}
   };
 
   const getVehicleJWT = async () => {
+    if (!authData.clientId || !authData.redirectUri || !authData.apiKey || !authData.vehicleTokenId) {
+      setError('Please fill in all authentication fields');
+      return;
+    }
+
     setLoading(true);
     setError('');
     
     try {
-      // This is a simplified flow - in production, you'd implement the full OAuth flow
-      // For now, we'll show a success message and let users manually input their JWT
-      setError('Please implement the full OAuth flow to obtain Vehicle JWT. For testing, you can manually input a valid JWT.');
+      console.log('Generating Vehicle JWT via backend...');
       
-      // In a real implementation:
-      // 1. Generate challenge
-      // 2. Sign challenge with API key
-      // 3. Submit challenge to get User/Developer JWT
-      // 4. Exchange for Vehicle JWT with permissions
+      const response = await fetch('/api/auth/vehicle-jwt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          client_id: authData.clientId,
+          redirect_uri: authData.redirectUri,
+          api_key: authData.apiKey,
+          vehicle_token_id: authData.vehicleTokenId
+        })
+      });
+
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.detail || `Authentication failed with status ${response.status}`);
+      }
+      
+      console.log('✅ Vehicle JWT received successfully');
+      setVehicleJWT(data.vehicle_jwt);
+      setError(''); // Clear any previous errors
       
     } catch (err) {
-      setError(err.message);
+      console.error('Authentication error:', err);
+      
+      if (err.message === 'Failed to fetch') {
+        setError('Backend server not running. Please start the Python backend server with: python backend/main.py');
+      } else {
+        setError(err.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -293,8 +319,8 @@ ${signalQueries}
               <Car className="w-6 h-6" />
             </div>
             <div>
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight">DIMO Telemetry</h1>
-              <p className="text-blue-100 text-sm mt-0.5">Mobile GraphQL Explorer</p>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight">PocketTelemetry</h1>
+              <p className="text-blue-100 text-sm mt-0.5">DIMO Telemetry Explorer</p>
             </div>
           </div>
         </div>
