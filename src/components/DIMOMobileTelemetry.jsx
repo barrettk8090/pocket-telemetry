@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Key, Car, Send, Copy, CheckCircle, AlertCircle, Loader2, Calendar, Clock } from 'lucide-react';
+import DimoLogo from '../assets/Dimo.svg';
 
 const DIMOMobileTelemetry = () => {
   const [activeTab, setActiveTab] = useState('auth');
@@ -310,32 +311,35 @@ ${signalQueries}
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gray-900">
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-indigo-700 text-white">
-        <div className="px-4 sm:px-6 py-6 pt-safe-top">
+      <div className="bg-gray-800 border-b border-gray-700">
+        <div className="px-4 sm:px-6 py-4 pt-safe-top">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-sm">
-              <Car className="w-6 h-6" />
+            <div className="w-8 h-8 flex items-center justify-center">
+              <img src={DimoLogo} alt="DIMO" className="w-8 h-8" />
             </div>
             <div>
-              <h1 className="text-xl sm:text-2xl font-bold tracking-tight">PocketTelemetry</h1>
-              <p className="text-blue-100 text-sm mt-0.5">DIMO Telemetry Explorer</p>
+              <h1 className="text-lg font-semibold text-white">PocketTelemetry</h1>
+              <p className="text-gray-400 text-sm">DIMO Telemetry Explorer</p>
             </div>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
+      <div className="bg-gray-800 border-b border-gray-700 sticky top-0 z-10">
         <div className="flex">
           <button
             onClick={() => setActiveTab('auth')}
-            className={`flex-1 py-4 px-3 text-sm font-semibold transition-all duration-200 ${
+            className={`flex-1 py-3 px-4 text-sm font-medium transition-all duration-200 ${
               activeTab === 'auth' 
-                ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50/50' 
-                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                ? 'border-b-2 text-white bg-gray-700/50' 
+                : 'text-gray-300 hover:text-white hover:bg-gray-700/30'
             }`}
+            style={{
+              borderBottomColor: activeTab === 'auth' ? '#70BCFF' : 'transparent'
+            }}
           >
             <Key className="w-4 h-4 inline mr-2" />
             <span className="hidden xs:inline">Authentication</span>
@@ -343,11 +347,14 @@ ${signalQueries}
           </button>
           <button
             onClick={() => setActiveTab('query')}
-            className={`flex-1 py-4 px-3 text-sm font-semibold transition-all duration-200 ${
+            className={`flex-1 py-3 px-4 text-sm font-medium transition-all duration-200 ${
               activeTab === 'query' 
-                ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50/50' 
-                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                ? 'border-b-2 text-white bg-gray-700/50' 
+                : 'text-gray-300 hover:text-white hover:bg-gray-700/30'
             }`}
+            style={{
+              borderBottomColor: activeTab === 'query' ? '#70BCFF' : 'transparent'
+            }}
           >
             <Car className="w-4 h-4 inline mr-2" />
             <span className="hidden xs:inline">Query Builder</span>
@@ -355,11 +362,14 @@ ${signalQueries}
           </button>
           <button
             onClick={() => setActiveTab('results')}
-            className={`flex-1 py-4 px-3 text-sm font-semibold transition-all duration-200 ${
+            className={`flex-1 py-3 px-4 text-sm font-medium transition-all duration-200 ${
               activeTab === 'results' 
-                ? 'border-b-2 border-blue-600 text-blue-600 bg-blue-50/50' 
-                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
+                ? 'border-b-2 text-white bg-gray-700/50' 
+                : 'text-gray-300 hover:text-white hover:bg-gray-700/30'
             }`}
+            style={{
+              borderBottomColor: activeTab === 'results' ? '#70BCFF' : 'transparent'
+            }}
           >
             <Send className="w-4 h-4 inline mr-2" />
             Results
@@ -372,51 +382,90 @@ ${signalQueries}
         {/* Auth Tab */}
         {activeTab === 'auth' && (
           <div className="space-y-6">
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+            <div className="bg-gray-800 rounded-lg border border-gray-700">
               <div className="p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-6">Developer Credentials</h2>
+                <h2 className="text-lg font-semibold text-white mb-6 flex items-center">
+                  <Key className="w-5 h-5 mr-2" style={{ color: '#70BCFF' }} />
+                  Developer Credentials
+                </h2>
                 
                 <div className="space-y-5">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Client ID</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Client ID</label>
                     <input
                       type="text"
                       value={authData.clientId}
                       onChange={(e) => setAuthData({...authData, clientId: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-sm text-white font-mono transition-colors"
+                      style={{
+                        '--tw-ring-color': '#70BCFF',
+                        '--tw-border-opacity': '1'
+                      }}
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#70BCFF';
+                        e.target.style.boxShadow = `0 0 0 2px rgba(112, 188, 255, 0.5)`;
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '';
+                        e.target.style.boxShadow = '';
+                      }}
                       placeholder="0x..."
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Redirect URI</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Redirect URI</label>
                     <input
                       type="text"
                       value={authData.redirectUri}
                       onChange={(e) => setAuthData({...authData, redirectUri: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-sm text-white font-mono transition-colors"
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#70BCFF';
+                        e.target.style.boxShadow = `0 0 0 2px rgba(112, 188, 255, 0.5)`;
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '';
+                        e.target.style.boxShadow = '';
+                      }}
                       placeholder="https://your-app.com/callback"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">API Key</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">API Key</label>
                     <input
                       type="password"
                       value={authData.apiKey}
                       onChange={(e) => setAuthData({...authData, apiKey: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-sm text-white font-mono transition-colors"
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#70BCFF';
+                        e.target.style.boxShadow = `0 0 0 2px rgba(112, 188, 255, 0.5)`;
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '';
+                        e.target.style.boxShadow = '';
+                      }}
                       placeholder="Your API key"
                     />
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Vehicle Token ID</label>
+                    <label className="block text-sm font-medium text-gray-300 mb-2">Vehicle Token ID</label>
                     <input
                       type="text"
                       value={authData.vehicleTokenId}
                       onChange={(e) => setAuthData({...authData, vehicleTokenId: e.target.value})}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-sm text-white font-mono transition-colors"
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#70BCFF';
+                        e.target.style.boxShadow = `0 0 0 2px rgba(112, 188, 255, 0.5)`;
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '';
+                        e.target.style.boxShadow = '';
+                      }}
                       placeholder="12345"
                     />
                   </div>
@@ -425,7 +474,23 @@ ${signalQueries}
                 <button
                   onClick={getVehicleJWT}
                   disabled={loading || !authData.clientId || !authData.apiKey || !authData.vehicleTokenId}
-                  className="w-full mt-6 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
+                  className="w-full mt-6 text-white py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                  style={{
+                    background: 'linear-gradient(to right, #70BCFF, #5BA3E6)',
+                    ':hover': {
+                      background: 'linear-gradient(to right, #5BA3E6, #4A92D6)'
+                    }
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!e.target.disabled) {
+                      e.target.style.background = 'linear-gradient(to right, #5BA3E6, #4A92D6)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!e.target.disabled) {
+                      e.target.style.background = 'linear-gradient(to right, #70BCFF, #5BA3E6)';
+                    }
+                  }}
                 >
                   {loading ? (
                     <Loader2 className="w-5 h-5 inline animate-spin mr-2" />
@@ -434,18 +499,26 @@ ${signalQueries}
                 </button>
 
                 <div className="mt-6">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Vehicle JWT (for testing)</label>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Vehicle JWT (for testing)</label>
                   <textarea
                     value={vehicleJWT}
                     onChange={(e) => setVehicleJWT(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-xl text-xs font-mono focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-50 focus:bg-white resize-none"
+                    className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-xs font-mono text-white transition-colors resize-none"
+                    onFocus={(e) => {
+                      e.target.style.borderColor = '#70BCFF';
+                      e.target.style.boxShadow = `0 0 0 2px rgba(112, 188, 255, 0.5)`;
+                    }}
+                    onBlur={(e) => {
+                      e.target.style.borderColor = '';
+                      e.target.style.boxShadow = '';
+                    }}
                     placeholder="Paste your Vehicle JWT here"
                     rows={4}
                   />
                 </div>
 
                 {vehicleJWT && (
-                  <div className="mt-3 flex items-center text-green-600 text-sm bg-green-50 px-3 py-2 rounded-lg">
+                  <div className="mt-3 flex items-center text-sm px-3 py-2 rounded-lg" style={{ color: '#70BCFF', backgroundColor: 'rgba(112, 188, 255, 0.1)', borderColor: 'rgba(112, 188, 255, 0.3)', border: '1px solid' }}>
                     <CheckCircle className="w-4 h-4 mr-2" />
                     JWT configured successfully
                   </div>
@@ -454,7 +527,7 @@ ${signalQueries}
             </div>
 
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
+              <div className="bg-red-900/30 border border-red-800 rounded-lg p-4 text-sm text-red-400">
                 <div className="flex items-start">
                   <AlertCircle className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" />
                   <div>{error}</div>
@@ -468,31 +541,39 @@ ${signalQueries}
         {activeTab === 'query' && (
           <div className="space-y-6">
             {/* Query Type Selector */}
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+            <div className="bg-gray-800 rounded-lg border border-gray-700">
               <div className="p-6">
-                <h2 className="text-lg font-semibold text-gray-900 mb-4">Query Type</h2>
+                <h2 className="text-lg font-semibold text-white mb-4">Query Type</h2>
                 <div className="grid grid-cols-2 gap-3">
                   <button
                     onClick={() => setQueryType('signalsLatest')}
-                    className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                    className={`p-4 rounded-lg border transition-all duration-200 ${
                       queryType === 'signalsLatest'
-                        ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-sm'
-                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300'
+                        ? 'bg-gray-700 border-gray-600 hover:bg-gray-600 hover:border-gray-500 shadow-sm'
+                        : 'bg-gray-700 border-gray-600 hover:bg-gray-600 hover:border-gray-500'
                     }`}
+                    style={queryType === 'signalsLatest' ? {
+                      backgroundColor: 'rgba(112, 188, 255, 0.1)',
+                      borderColor: 'rgba(112, 188, 255, 0.3)'
+                    } : {}}
                   >
-                    <div className="text-sm font-semibold text-gray-900">Latest Signals</div>
-                    <div className="text-xs text-gray-600 mt-1">Current values only</div>
+                    <div className="text-sm font-semibold text-white">Latest Signals</div>
+                    <div className="text-xs text-gray-400 mt-1">Current values only</div>
                   </button>
                   <button
                     onClick={() => setQueryType('signals')}
-                    className={`p-4 rounded-xl border-2 transition-all duration-200 ${
+                    className={`p-4 rounded-lg border transition-all duration-200 ${
                       queryType === 'signals'
-                        ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-sm'
-                        : 'bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300'
+                        ? 'bg-gray-700 border-gray-600 hover:bg-gray-600 hover:border-gray-500 shadow-sm'
+                        : 'bg-gray-700 border-gray-600 hover:bg-gray-600 hover:border-gray-500'
                     }`}
+                    style={queryType === 'signals' ? {
+                      backgroundColor: 'rgba(112, 188, 255, 0.1)',
+                      borderColor: 'rgba(112, 188, 255, 0.3)'
+                    } : {}}
                   >
-                    <div className="text-sm font-semibold text-gray-900">Historical Signals</div>
-                    <div className="text-xs text-gray-600 mt-1">Time series data</div>
+                    <div className="text-sm font-semibold text-white">Historical Signals</div>
+                    <div className="text-xs text-gray-400 mt-1">Time series data</div>
                   </button>
                 </div>
               </div>
@@ -500,44 +581,68 @@ ${signalQueries}
 
             {/* Date Range & Interval (only for signals query) */}
             {queryType === 'signals' && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+              <div className="bg-gray-800 rounded-lg border border-gray-700">
                 <div className="p-6">
-                  <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                  <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
                     <Calendar className="w-5 h-5 mr-2" />
                     Date Range & Interval
                   </h2>
                   
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">From</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">From</label>
                       <input
                         type="datetime-local"
                         value={dateRange.from}
                         onChange={(e) => setDateRange(prev => ({ ...prev, from: e.target.value }))}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-50 focus:bg-white"
+                        className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-sm text-white transition-colors"
+                        onFocus={(e) => {
+                          e.target.style.borderColor = '#70BCFF';
+                          e.target.style.boxShadow = `0 0 0 2px rgba(112, 188, 255, 0.5)`;
+                        }}
+                        onBlur={(e) => {
+                          e.target.style.borderColor = '';
+                          e.target.style.boxShadow = '';
+                        }}
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">To</label>
+                      <label className="block text-sm font-medium text-gray-300 mb-2">To</label>
                       <input
                         type="datetime-local"
                         value={dateRange.to}
                         onChange={(e) => setDateRange(prev => ({ ...prev, to: e.target.value }))}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-50 focus:bg-white"
+                        className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-sm text-white transition-colors"
+                        onFocus={(e) => {
+                          e.target.style.borderColor = '#70BCFF';
+                          e.target.style.boxShadow = `0 0 0 2px rgba(112, 188, 255, 0.5)`;
+                        }}
+                        onBlur={(e) => {
+                          e.target.style.borderColor = '';
+                          e.target.style.boxShadow = '';
+                        }}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
+                    <label className="block text-sm font-medium text-gray-300 mb-2 flex items-center">
                       <Clock className="w-4 h-4 mr-1" />
                       Interval
                     </label>
                     <select
                       value={dateRange.interval}
                       onChange={(e) => setDateRange(prev => ({ ...prev, interval: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-xl text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-gray-50 focus:bg-white"
+                      className="w-full px-4 py-3 bg-gray-900 border border-gray-600 rounded-lg text-sm text-white transition-colors"
+                      onFocus={(e) => {
+                        e.target.style.borderColor = '#70BCFF';
+                        e.target.style.boxShadow = `0 0 0 2px rgba(112, 188, 255, 0.5)`;
+                      }}
+                      onBlur={(e) => {
+                        e.target.style.borderColor = '';
+                        e.target.style.boxShadow = '';
+                      }}
                     >
                       {intervalOptions.map(option => (
                         <option key={option.value} value={option.value}>
@@ -550,20 +655,20 @@ ${signalQueries}
               </div>
             )}
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+            <div className="bg-gray-800 rounded-lg border border-gray-700">
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-semibold text-gray-900">Select Signals</h2>
+                  <h2 className="text-lg font-semibold text-white">Select Signals</h2>
                   {selectedSignals.length > 0 && (
-                    <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-1 rounded-full">
+                    <span className="text-xs font-semibold px-2.5 py-1 rounded-full" style={{ backgroundColor: 'rgba(112, 188, 255, 0.1)', color: '#70BCFF' }}>
                       {selectedSignals.length} selected
                     </span>
                   )}
                 </div>
-                <p className="text-sm text-gray-600 mb-6">
+                <p className="text-sm text-gray-400 mb-6">
                   Tap signals to add them to your query
                   {queryType === 'signals' && (
-                    <span className="block mt-1 text-blue-600">
+                    <span className="block mt-1" style={{ color: '#70BCFF' }}>
                       Choose aggregation method for each selected signal
                     </span>
                   )}
@@ -572,8 +677,8 @@ ${signalQueries}
                 <div className="space-y-6">
                   {Object.entries(signalCategories).map(([category, signals]) => (
                     <div key={category}>
-                      <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center">
-                        <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                      <h3 className="text-sm font-semibold text-gray-300 mb-3 flex items-center">
+                        <div className="w-2 h-2 rounded-full mr-2" style={{ backgroundColor: '#70BCFF' }}></div>
                         {category}
                       </h3>
                       <div className="space-y-2">
@@ -581,19 +686,23 @@ ${signalQueries}
                           <div key={signal.name}>
                             <button
                               onClick={() => toggleSignal(signal.name)}
-                              className={`w-full text-left p-4 rounded-xl border-2 transition-all duration-200 ${
+                              className={`w-full text-left p-4 rounded-lg border transition-all duration-200 ${
                                 selectedSignals.includes(signal.name)
-                                  ? 'bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200 shadow-sm'
-                                  : 'bg-gray-50 border-gray-200 hover:bg-gray-100 hover:border-gray-300'
+                                  ? 'bg-gray-700 border-gray-600 hover:bg-gray-600 hover:border-gray-500 shadow-sm'
+                                  : 'bg-gray-700 border-gray-600 hover:bg-gray-600 hover:border-gray-500'
                               }`}
+                              style={selectedSignals.includes(signal.name) ? {
+                                backgroundColor: 'rgba(112, 188, 255, 0.1)',
+                                borderColor: 'rgba(112, 188, 255, 0.3)'
+                              } : {}}
                             >
                               <div className="flex items-center justify-between">
                                 <div className="flex-1 min-w-0">
-                                  <div className="text-sm font-medium text-gray-900 truncate">{signal.name}</div>
-                                  <div className="text-xs text-gray-600 mt-1">{signal.description}</div>
+                                  <div className="text-sm font-medium text-white truncate">{signal.name}</div>
+                                  <div className="text-xs text-gray-400 mt-1">{signal.description}</div>
                                 </div>
                                 {selectedSignals.includes(signal.name) && (
-                                  <CheckCircle className="w-5 h-5 text-blue-600 ml-3 flex-shrink-0" />
+                                  <CheckCircle className="w-5 h-5 ml-3 flex-shrink-0" style={{ color: '#70BCFF' }} />
                                 )}
                               </div>
                             </button>
@@ -602,21 +711,34 @@ ${signalQueries}
                             {selectedSignals.includes(signal.name) && queryType === 'signals' && (
                               <div className="mt-2 ml-4">
                                 <div className="flex items-center justify-between mb-1">
-                                  <label className="block text-xs font-medium text-gray-600">
+                                  <label className="block text-xs font-medium text-gray-400">
                                     Aggregation Method
                                   </label>
                                   <span className={`text-xs px-2 py-0.5 rounded-full ${
                                     stringAggregationSignals.has(signal.name)
                                       ? 'bg-purple-100 text-purple-700'
-                                      : 'bg-blue-100 text-blue-700'
-                                  }`}>
+                                      : 'text-white'
+                                  }`}
+                                  style={!stringAggregationSignals.has(signal.name) ? {
+                                    backgroundColor: 'rgba(112, 188, 255, 0.1)',
+                                    color: '#70BCFF'
+                                  } : {}}
+                                  >
                                     {stringAggregationSignals.has(signal.name) ? 'String' : 'Numeric'}
                                   </span>
                                 </div>
                                 <select
                                   value={signalAggregations[signal.name] || (stringAggregationSignals.has(signal.name) ? 'RAND' : 'AVG')}
                                   onChange={(e) => updateSignalAggregation(signal.name, e.target.value)}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-xs focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors bg-white"
+                                  className="w-full px-3 py-2 bg-gray-900 border border-gray-600 rounded-lg text-xs text-white transition-colors"
+                                  onFocus={(e) => {
+                                    e.target.style.borderColor = '#70BCFF';
+                                    e.target.style.boxShadow = `0 0 0 2px rgba(112, 188, 255, 0.5)`;
+                                  }}
+                                  onBlur={(e) => {
+                                    e.target.style.borderColor = '';
+                                    e.target.style.boxShadow = '';
+                                  }}
                                 >
                                   {getAggregationOptions(signal.name).map(option => (
                                     <option key={option.value} value={option.value}>
@@ -636,17 +758,31 @@ ${signalQueries}
             </div>
 
             {selectedSignals.length > 0 && (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+              <div className="bg-gray-800 rounded-lg border border-gray-700">
                 <div className="p-6">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-lg font-semibold text-gray-900">Generated Query</h3>
+                    <h3 className="text-lg font-semibold text-white">Generated Query</h3>
                     <button
                       onClick={copyToClipboard}
                       className={`text-sm flex items-center px-3 py-2 rounded-lg transition-all duration-200 ${
                         copied 
-                          ? 'text-green-700 bg-green-50' 
-                          : 'text-blue-600 hover:bg-blue-50'
+                          ? 'bg-opacity-10' 
+                          : 'hover:bg-opacity-30'
                       }`}
+                      style={{
+                        color: copied ? '#70BCFF' : '#70BCFF',
+                        backgroundColor: copied ? 'rgba(112, 188, 255, 0.1)' : 'transparent'
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!copied) {
+                          e.target.style.backgroundColor = 'rgba(112, 188, 255, 0.2)';
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!copied) {
+                          e.target.style.backgroundColor = 'transparent';
+                        }
+                      }}
                     >
                       {copied ? (
                         <>
@@ -661,7 +797,7 @@ ${signalQueries}
                       )}
                     </button>
                   </div>
-                  <div className="bg-gray-900 rounded-xl p-4 overflow-x-auto">
+                  <div className="bg-gray-700 rounded-xl p-4 overflow-x-auto">
                     <pre className="text-xs text-gray-300 whitespace-pre-wrap">
                       {generateQuery()}
                     </pre>
@@ -670,7 +806,20 @@ ${signalQueries}
                   <button
                     onClick={executeQuery}
                     disabled={loading || !vehicleJWT}
-                    className="w-full mt-6 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-3 rounded-xl font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl"
+                    className="w-full mt-6 text-white py-3 rounded-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+                    style={{
+                      background: 'linear-gradient(to right, #70BCFF, #5BA3E6)'
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!e.target.disabled) {
+                        e.target.style.background = 'linear-gradient(to right, #5BA3E6, #4A92D6)';
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!e.target.disabled) {
+                        e.target.style.background = 'linear-gradient(to right, #70BCFF, #5BA3E6)';
+                      }
+                    }}
                   >
                     {loading ? (
                       <Loader2 className="w-5 h-5 inline animate-spin mr-2" />
@@ -689,7 +838,7 @@ ${signalQueries}
         {activeTab === 'results' && (
           <div className="space-y-6">
             {error && (
-              <div className="bg-red-50 border border-red-200 rounded-xl p-4 text-sm text-red-700">
+              <div className="bg-red-900/30 border border-red-800 rounded-lg p-4 text-sm text-red-400">
                 <div className="flex items-start">
                   <AlertCircle className="w-5 h-5 mr-3 mt-0.5 flex-shrink-0" />
                   <div>{error}</div>
@@ -699,12 +848,12 @@ ${signalQueries}
             
             {queryResult ? (
               <div className="space-y-6">
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+                <div className="bg-gray-800 rounded-lg border border-gray-700">
                   <div className="p-6">
-                    <h2 className="text-lg font-semibold text-gray-900 mb-4">Query Results</h2>
+                    <h2 className="text-lg font-semibold text-white mb-4">Query Results</h2>
                     <div className="mb-6">
-                      <h3 className="text-sm font-semibold text-gray-700 mb-3">Raw Response:</h3>
-                      <div className="bg-gray-900 rounded-xl p-4 overflow-x-auto">
+                      <h3 className="text-sm font-semibold text-gray-300 mb-3">Raw Response:</h3>
+                      <div className="bg-gray-700 rounded-xl p-4 overflow-x-auto">
                         <pre className="text-xs text-gray-300 whitespace-pre-wrap">
                           {JSON.stringify(queryResult, null, 2)}
                         </pre>
@@ -714,7 +863,7 @@ ${signalQueries}
                     {/* Display parsed signal values if available */}
                     {queryResult.data && (
                       <div>
-                        <h3 className="text-sm font-semibold text-gray-700 mb-4">Parsed Signal Values:</h3>
+                        <h3 className="text-sm font-semibold text-gray-300 mb-4">Parsed Signal Values:</h3>
                         
                         {/* Handle signalsLatest response format */}
                         {queryResult.data.signalsLatest && (
@@ -722,15 +871,15 @@ ${signalQueries}
                             {Object.entries(queryResult.data.signalsLatest).map(([key, value]) => {
                               if (key === 'lastSeen' || !value) return null;
                               return (
-                                <div key={key} className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-xl p-4">
-                                  <div className="font-semibold text-sm text-gray-900 mb-2">{key}</div>
+                                <div key={key} className="rounded-xl p-4" style={{ backgroundColor: 'rgba(112, 188, 255, 0.1)', borderColor: 'rgba(112, 188, 255, 0.3)', border: '1px solid' }}>
+                                  <div className="font-semibold text-sm mb-2" style={{ color: '#70BCFF' }}>{key}</div>
                                   {value.value !== undefined && (
-                                    <div className="text-lg font-bold text-blue-700 mb-1">
+                                    <div className="text-lg font-bold text-white mb-1">
                                       {value.value}
                                     </div>
                                   )}
                                   {value.timestamp && (
-                                    <div className="text-xs text-gray-600">
+                                    <div className="text-xs text-gray-400">
                                       {new Date(value.timestamp).toLocaleString()}
                                     </div>
                                   )}
@@ -745,19 +894,19 @@ ${signalQueries}
                           <div className="space-y-4">
                             {queryResult.data.signals.length > 0 ? (
                               <>
-                                <div className="text-sm text-gray-600 mb-2">
+                                <div className="text-sm text-gray-400 mb-2">
                                   Found {queryResult.data.signals.length} data points
                                 </div>
                                 <div className="grid gap-3 max-h-96 overflow-y-auto">
                                   {queryResult.data.signals.slice(0, 10).map((dataPoint, index) => (
-                                    <div key={index} className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl p-4">
-                                      <div className="text-xs font-semibold text-gray-700 mb-2">
+                                    <div key={index} className="rounded-xl p-4" style={{ backgroundColor: 'rgba(112, 188, 255, 0.1)', borderColor: 'rgba(112, 188, 255, 0.3)', border: '1px solid' }}>
+                                      <div className="text-xs font-semibold mb-2" style={{ color: '#70BCFF' }}>
                                         Data Point {index + 1}
                                       </div>
                                       {Object.entries(dataPoint).map(([signalName, value]) => (
                                         <div key={signalName} className="mb-2">
-                                          <span className="text-sm font-medium text-gray-900">{signalName}:</span>
-                                          <span className="ml-2 text-sm text-gray-700">
+                                          <span className="text-sm font-medium text-white">{signalName}:</span>
+                                          <span className="ml-2 text-sm text-gray-300">
                                             {signalName === 'timestamp' 
                                               ? new Date(value).toLocaleString()
                                               : value?.toString() || 'null'
@@ -775,7 +924,7 @@ ${signalQueries}
                                 )}
                               </>
                             ) : (
-                              <div className="text-sm text-gray-500 p-4 bg-gray-50 rounded-xl">
+                              <div className="text-sm text-gray-400 p-4 bg-gray-700 rounded-xl">
                                 No data found for the selected time range and signals
                               </div>
                             )}
@@ -787,13 +936,13 @@ ${signalQueries}
                 </div>
               </div>
             ) : (
-              <div className="bg-white rounded-2xl shadow-sm border border-gray-100">
+              <div className="bg-gray-800 rounded-lg border border-gray-700">
                 <div className="p-12 text-center">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-indigo-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    <Car className="w-8 h-8 text-blue-600" />
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'rgba(112, 188, 255, 0.2)' }}>
+                    <Car className="w-8 h-8" style={{ color: '#70BCFF' }} />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">No Results Yet</h3>
-                  <p className="text-gray-600 text-sm">Execute a query to see telemetry data</p>
+                  <h3 className="text-lg font-semibold text-white mb-2">No Results Yet</h3>
+                  <p className="text-gray-400 text-sm">Execute a query to see telemetry data</p>
                 </div>
               </div>
             )}
