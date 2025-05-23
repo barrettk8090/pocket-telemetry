@@ -24,6 +24,7 @@ const DIMOMobileTelemetry = () => {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
   const [jwtTimer, setJwtTimer] = useState(null); // Timer in seconds, starts at 599 (9:59)
+  const [backendStatus, setBackendStatus] = useState(null); // 'checking', 'online', 'offline'
 
   // JWT Timer countdown effect
   useEffect(() => {
@@ -55,6 +56,33 @@ const DIMOMobileTelemetry = () => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // Check backend status
+  const checkBackendStatus = async () => {
+    setBackendStatus('checking');
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || '';
+      const startTime = Date.now();
+      
+      const response = await fetch(`${apiUrl}/api/health`, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      
+      const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+      
+      if (response.ok) {
+        setBackendStatus('online');
+        console.log(`✅ Backend is online (responded in ${duration}s)`);
+      } else {
+        setBackendStatus('offline');
+        console.log(`❌ Backend returned status ${response.status}`);
+      }
+    } catch (err) {
+      setBackendStatus('offline');
+      console.log('❌ Backend is offline or unreachable:', err.message);
+    }
   };
 
   // Available aggregation functions
@@ -314,8 +342,24 @@ ${signalQueries}
       
       // Use environment variable for API URL, fallback to local for development
       const apiUrl = import.meta.env.VITE_API_URL || '';
+      const fullUrl = `${apiUrl}/api/auth/vehicle-jwt`;
       
-      const response = await fetch(`${apiUrl}/api/auth/vehicle-jwt`, {
+      console.log('🔄 Making request to:', fullUrl);
+      console.log('📝 Request payload:', {
+        client_id: authData.clientId.substring(0, 10) + '...',
+        vehicle_token_id: authData.vehicleTokenId
+      });
+      
+      // Add timeout and more detailed logging
+      const startTime = Date.now();
+      setError('🚀 Connecting to backend... (This may take 1-2 minutes on free tier if service is "cold")');
+      
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+      }, 180000); // 3 minute timeout
+      
+      const response = await fetch(fullUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -325,8 +369,13 @@ ${signalQueries}
           redirect_uri: authData.redirectUri,
           api_key: authData.apiKey,
           vehicle_token_id: authData.vehicleTokenId
-        })
+        }),
+        signal: controller.signal
       });
+
+      clearTimeout(timeoutId);
+      const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+      console.log(`⏱️ Backend responded in ${duration}s`);
 
       const data = await response.json();
       
@@ -344,8 +393,10 @@ ${signalQueries}
     } catch (err) {
       console.error('Authentication error:', err);
       
-      if (err.message === 'Failed to fetch') {
-        setError('Backend server not running. Please start the Python backend server with: python backend/main.py');
+      if (err.name === 'AbortError') {
+        setError('⏰ Request timed out after 3 minutes. The backend service may be experiencing a cold start. Please try again.');
+      } else if (err.message === 'Failed to fetch') {
+        setError('🚨 Cannot connect to backend. Check if your backend URL is correct in environment variables, or the backend service may be down.');
       } else {
         setError(err.message);
       }
@@ -541,6 +592,44 @@ ${signalQueries}
                   ) : null}
                   Get Vehicle JWT
                 </button>
+
+                {/* Backend Status Check */}
+                <div className="mt-4 flex items-center justify-between">
+                  <button
+                    onClick={checkBackendStatus}
+                    disabled={backendStatus === 'checking'}
+                    className="text-sm px-4 py-2 rounded-lg border border-gray-600 text-gray-300 hover:text-white hover:border-gray-500 transition-all duration-200 disabled:opacity-50"
+                  >
+                    {backendStatus === 'checking' ? (
+                      <>
+                        <Loader2 className="w-4 h-4 inline animate-spin mr-2" />
+                        Checking...
+                      </>
+                    ) : (
+                      'Check Backend Status'
+                    )}
+                  </button>
+                  
+                  {backendStatus && backendStatus !== 'checking' && (
+                    <div className={`flex items-center text-sm px-3 py-1 rounded-full ${
+                      backendStatus === 'online' 
+                        ? 'text-green-400 bg-green-400/10 border border-green-400/30' 
+                        : 'text-red-400 bg-red-400/10 border border-red-400/30'
+                    }`}>
+                      {backendStatus === 'online' ? (
+                        <>
+                          <CheckCircle className="w-4 h-4 mr-1" />
+                          Backend Online
+                        </>
+                      ) : (
+                        <>
+                          <AlertCircle className="w-4 h-4 mr-1" />
+                          Backend Offline
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
 
                 <div className="mt-6">
                   <label className="block text-sm font-medium text-gray-300 mb-2">Vehicle JWT (for testing)</label>
