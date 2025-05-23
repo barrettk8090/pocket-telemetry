@@ -24,7 +24,6 @@ const DIMOMobileTelemetry = () => {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
   const [jwtTimer, setJwtTimer] = useState(null); // Timer in seconds, starts at 599 (9:59)
-  const [backendStatus, setBackendStatus] = useState(null); // 'checking', 'online', 'offline'
 
   // JWT Timer countdown effect
   useEffect(() => {
@@ -56,33 +55,6 @@ const DIMOMobileTelemetry = () => {
     const minutes = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${minutes}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  // Check backend status
-  const checkBackendStatus = async () => {
-    setBackendStatus('checking');
-    try {
-      const apiUrl = import.meta.env.VITE_API_URL || '';
-      const startTime = Date.now();
-      
-      const response = await fetch(`${apiUrl}/api/health`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      
-      const duration = ((Date.now() - startTime) / 1000).toFixed(1);
-      
-      if (response.ok) {
-        setBackendStatus('online');
-        console.log(`✅ Backend is online (responded in ${duration}s)`);
-      } else {
-        setBackendStatus('offline');
-        console.log(`❌ Backend returned status ${response.status}`);
-      }
-    } catch (err) {
-      setBackendStatus('offline');
-      console.log('❌ Backend is offline or unreachable:', err.message);
-    }
   };
 
   // Available aggregation functions
@@ -592,44 +564,6 @@ ${signalQueries}
                   ) : null}
                   Get Vehicle JWT
                 </button>
-
-                {/* Backend Status Check */}
-                <div className="mt-4 flex items-center justify-between">
-                  <button
-                    onClick={checkBackendStatus}
-                    disabled={backendStatus === 'checking'}
-                    className="text-sm px-4 py-2 rounded-lg border border-gray-600 text-gray-300 hover:text-white hover:border-gray-500 transition-all duration-200 disabled:opacity-50"
-                  >
-                    {backendStatus === 'checking' ? (
-                      <>
-                        <Loader2 className="w-4 h-4 inline animate-spin mr-2" />
-                        Checking...
-                      </>
-                    ) : (
-                      'Check Backend Status'
-                    )}
-                  </button>
-                  
-                  {backendStatus && backendStatus !== 'checking' && (
-                    <div className={`flex items-center text-sm px-3 py-1 rounded-full ${
-                      backendStatus === 'online' 
-                        ? 'text-green-400 bg-green-400/10 border border-green-400/30' 
-                        : 'text-red-400 bg-red-400/10 border border-red-400/30'
-                    }`}>
-                      {backendStatus === 'online' ? (
-                        <>
-                          <CheckCircle className="w-4 h-4 mr-1" />
-                          Backend Online
-                        </>
-                      ) : (
-                        <>
-                          <AlertCircle className="w-4 h-4 mr-1" />
-                          Backend Offline
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
 
                 <div className="mt-6">
                   <label className="block text-sm font-medium text-gray-300 mb-2">Vehicle JWT (for testing)</label>
